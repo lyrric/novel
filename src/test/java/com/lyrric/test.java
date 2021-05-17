@@ -2,8 +2,7 @@ package com.lyrric;
 
 import com.github.lyrric.FileHandler;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author wangxiaodong
@@ -11,10 +10,10 @@ import java.io.IOException;
  * @date 2021/4/26 10:35
  */
 public class test {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         FileHandler fileHandler = new FileHandler(true);
-        File file = new File("C:\\Users\\Administrator\\Desktop\\2021.4.17言情书单~明月珰\\《百媚生》作者：明月珰.txt");
+        File file = new File("C:\\Users\\xuanxin\\Desktop\\新建文件夹\\（1V1）《八月夜》作者：茶茶好萌--【完结】.txt");
         fileHandler.executeOne(file);
-
     }
+
 }
