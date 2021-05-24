@@ -5,29 +5,35 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FileHandler {
 
     private final String title;
     private String[] content;
 
+    private List<String> ads;
+
     public FileHandler(boolean b) {
         if(b){
             title = "【公主号：胖兔兔推文】";
-            content = new String[]{"本小说由微信公众号：【胖兔兔推文】整理",
+            content = new String[]{
+                    "===========================================",
+                    "本小说由微信公众号：【胖兔兔推文】整理",
                     "每天定时更新超多好看的小说，关注我拒绝文荒。",
                     "附：【本作品来自互联网，本人不做任何负责】内容版权归作者所有！",
                     "==========================================="};
         }else{
             title = "【公主号：胖兔兔推文酱】";
-            content = new String[]{"本小说由微信公众号：【胖兔兔推文酱】整理",
+            content = new String[]{
+                    "===========================================",
+                    "本小说由微信公众号：【胖兔兔推文酱】整理",
                     "每天定时更新超多好看的小说，关注我拒绝文荒。",
                     "附：【本作品来自互联网，本人不做任何负责】内容版权归作者所有！",
                     "==========================================="};
         }
+        ads = getFilterText();
     }
 
     private String getNewFileName(String name){
@@ -39,13 +45,24 @@ public class FileHandler {
 
     public boolean executeOne(File file) throws IOException {
         String name = file.getName();
-        if(name.contains(title) || name.endsWith(".jar")){
+        if(name.contains(title) || name.startsWith("novel") || name.endsWith(".jar")){
             return false;
         }
         //开头和结束加入content
         FileInputStream is = new FileInputStream(file);
         Charset charset = Charset.forName(getCharset(file));
         List<String> lines = IOUtils.readLines(is, charset);
+        Iterator<String> iterator = lines.iterator();
+        //移除广告
+        while (iterator.hasNext()){
+            String str = iterator.next();
+            for (String ad : ads) {
+                if(str.contains(ad)){
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
         Random random = new Random();
         for (int i = 0; i < 10; i++) {
             //随机插入广告
@@ -122,5 +139,18 @@ public class FileHandler {
         File path = new File("./处理后文件");
         path.mkdirs();
         file.createNewFile();
+    }
+
+    private List<String> getFilterText(){
+        File file = new File("novel.txt");
+        if(file.exists()){
+            try {
+                List<String> ads = IOUtils.readLines(new FileInputStream(file), StandardCharsets.UTF_8);
+                return ads.stream().filter(t->!t.trim().equals("")).collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new ArrayList<>();
     }
 }

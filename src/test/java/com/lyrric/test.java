@@ -12,7 +12,7 @@ import java.io.*;
 public class test {
     public static void main(String[] args) throws Exception {
         FileHandler fileHandler = new FileHandler(true);
-        File file = new File("C:\\Users\\xuanxin\\Desktop\\新建文件夹\\（1V1）《八月夜》作者：茶茶好萌--【完结】.txt");
+        File file = new File("C:\\Users\\xuanxin\\Desktop\\需要替换的内容\\【GL】纯属意外.txt");
         fileHandler.executeOne(file);
     }
 
