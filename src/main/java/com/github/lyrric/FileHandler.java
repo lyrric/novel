@@ -48,6 +48,9 @@ public class FileHandler {
         if(name.contains(title) || name.startsWith("novel") || name.endsWith(".jar")){
             return false;
         }
+        if(!name.toLowerCase().endsWith(".txt")){
+            return false;
+        }
         //开头和结束加入content
         FileInputStream is = new FileInputStream(file);
         Charset charset = Charset.forName(getCharset(file));
